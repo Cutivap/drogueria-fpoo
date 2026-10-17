@@ -45,7 +45,7 @@ float CValidador::leerFloatPositivo(string mensaje){
         }
 
         stringstream ss(auxLinea);
-        double valor;
+        float valor;
         char extra;
 
         if (ss >> valor && !(ss >> extra) && valor > 0){
