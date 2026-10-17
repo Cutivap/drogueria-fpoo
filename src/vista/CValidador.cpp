@@ -92,11 +92,22 @@ string texto;
 }
 
 string CValidador::leerFecha(string mensaje){
-    // STUB (Grupo 3): implementar
-    string texto;
-    salida << mensaje;
-    entrada >> texto;
-    return texto;
+while (true) {
+        // Primero nos aseguramos de que escriba algo que no esté vacío
+        string fecha = leerTextoNoVacio(mensaje);
+
+        // Si la entrada se canceló, devolvemos vacío
+        if (fecha.empty()) {
+            return "";
+        }
+
+        // Si la fecha pasa la prueba de calendario, la aceptamos
+        if (esFechaValida(fecha)) {
+            return fecha;
+        }
+
+        salida << "Fecha inválida o inexistente en el calendario. Inténtalo de nuevo.\n";
+    }
 }
 
 bool CValidador::esFechaValida(string fecha){
