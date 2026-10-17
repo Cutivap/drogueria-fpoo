@@ -100,6 +100,39 @@ string CValidador::leerFecha(string mensaje){
 }
 
 bool CValidador::esFechaValida(string fecha){
-    // STUB (Grupo 3): implementar
-    return true;
+    // Paso A: Validar la estructura visual básica (debe medir exactamente 10 caracteres y tener guiones en su lugar)
+    if (fecha.length() != 10 || fecha[2] != '-' || fecha[5] != '-') {
+        return false;
+    }
+
+    // Paso B: Verificar que el resto de posiciones sean números (del 0 al 9)
+    for (int i = 0; i < 10; i++) {
+        if (i == 2 || i == 5) continue; // Saltamos los guiones porque ya sabemos que están ahí
+
+        if (!isdigit(static_cast<unsigned char>(fecha[i]))) {
+            return false; // Si hay una letra o símbolo extraño, la fecha no sirve
+        }
+    }
+
+    // Paso C: Separar la fecha en día, mes y año convirtiéndolos a números enteros
+    int dia = stoi(fecha.substr(0, 2));
+    int mes = stoi(fecha.substr(3, 2));
+    int anio = stoi(fecha.substr(6, 4));
+
+    // Paso D: Validar rangos lógicos básicos del calendario
+    if (anio < 1 || mes < 1 || mes > 12 || dia < 1) {
+        return false;
+    }
+
+    // Paso E: Definir cuántos días tiene cada mes por defecto (de enero a diciembre)
+    int diasPorMes[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    // Paso F: Ajustar febrero si el año es bisiesto (29 días en vez de 28)
+    bool esBisiesto = (anio % 400 == 0) || (anio % 4 == 0 && anio % 100 != 0);
+    if (esBisiesto) {
+        diasPorMes[1] = 29;
+    }
+
+    // Paso G: Verificar que el día no rebase el límite máximo del mes correspondiente
+    return dia <= diasPorMes[mes - 1];
 }
