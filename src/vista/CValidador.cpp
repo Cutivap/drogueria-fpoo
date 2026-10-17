@@ -13,13 +13,12 @@ CValidador::CValidador(istream& entrada_, ostream& salida_) : entrada(entrada_),
 }
 
 int CValidador::leerEntero(string mensaje, int minimo, int maximo){
-    // STUB (Grupo 3): implementar
     string auxLinea; // linea auxiliar 
     while (true){
         salida << mensaje;
 
-        if (!getline(entrada, auxLinea)){ // si logra leer la linea el metodo sigue, sino se retorna minimo. Si no logra leer la linea es muy problable que sea porque se llega a eof
-            return minimo; // al retornar minimo se sale del metodo
+        if (!getline(entrada, auxLinea)){ 
+            return minimo; 
         }
 
         stringstream ss(auxLinea); //stringstream con la linea auxiliar para validar que la linea que lee getline() solo sea un entero
@@ -37,11 +36,27 @@ int CValidador::leerEntero(string mensaje, int minimo, int maximo){
 }
 
 float CValidador::leerFloatPositivo(string mensaje){
-    // STUB (Grupo 3): implementar
-    float valor = 0;
-    salida << mensaje;
-    entrada >> valor;
-    return valor;
+    string auxLinea; // linea auxiliar
+    while (true){
+        salida << mensaje;
+
+        if (!getline(entrada, auxLinea)){// si logra leer la linea el metodo sigue, sino se retorna 0. Si no logra leer la linea es muy problable que sea porque se llega a eof
+            return 0; // al retornar 0 se sale del metodo
+        }
+
+        stringstream ss(auxLinea);
+        double valor;
+        char extra;
+
+        if (ss >> valor && !(ss >> extra) && valor > 0){
+            return valor; // al retornar el valor valido se sale del metodo
+        }
+        /* En este if se evaluan 3 condiciones con el operador &&, la unica manera que el if se ejecute es que todas sean true 
+        *la primera (ss >> valor) devuelve true cuando ss lee un numero real, o sea que si lee cualquier otra cosa decuelve false, el if no entra *y se repite el ciclo
+        * La segunda (!(ss >> extra)) devuelve true cuando ss falla en leer el siguiente caracter despues de la primera condicion, o sea que si *hay cualquier cosa despues del real que se leyo la condicion devuelve false y el if no entra
+        * La tercera (valor > 0) revisa si el valor es positivo, si no devuelve false y el if no entra */
+    }
+    
 }
 
 string CValidador::leerTextoNoVacio(string mensaje){
