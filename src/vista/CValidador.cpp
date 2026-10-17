@@ -7,18 +7,20 @@
 */
 #include "CValidador.h"
 #include <sstream>
+#include <string>
+#include <cctype>
 using namespace std;
 
 CValidador::CValidador(istream& entrada_, ostream& salida_) : entrada(entrada_), salida(salida_) {
 }
 
 int CValidador::leerEntero(string mensaje, int minimo, int maximo){
-    string auxLinea; // linea auxiliar 
+    string auxLinea; // linea auxiliar
     while (true){
         salida << mensaje;
 
-        if (!getline(entrada, auxLinea)){ 
-            return minimo; 
+        if (!getline(entrada, auxLinea)){
+            return minimo;
         }
 
         stringstream ss(auxLinea); //stringstream con la linea auxiliar para validar que la linea que lee getline() solo sea un entero
@@ -28,10 +30,10 @@ int CValidador::leerEntero(string mensaje, int minimo, int maximo){
         if (ss >> valor && !(ss >> extra) && valor >= minimo && valor <= maximo){
             return valor;// al retornar al valor valido se sale del metodo
         }
-        /* En este if se evaluan 4 condiciones con el operador &&, la unica manera que el if se ejecute es que todas sean true 
+        /* En este if se evaluan 4 condiciones con el operador &&, la unica manera que el if se ejecute es que todas sean true
         *la primera (ss >> valor) es true cuando ss lee un numero entero, o sea que si lee cualquier otra cosa es false, el if no entra y se *repite el ciclo
         * La segunda (!(ss >> extra)) es true cuando ss falla en leer el siguiente caracter despues de la primera condicion, o sea que si hay *cualquier cosa despues del entero que se leyo la condicion es false y el if no entra
-        * La tercera y cuarta (valor >= minimo && valor <=maximo) revisan si el valor esta en el rango [minimo, maximo] si valor es mayor a *maximo o menor a minimo, sus condiciones fallan y el if no entra */     
+        * La tercera y cuarta (valor >= minimo && valor <=maximo) revisan si el valor esta en el rango [minimo, maximo] si valor es mayor a *maximo o menor a minimo, sus condiciones fallan y el if no entra */
     }
 }
 
@@ -51,20 +53,42 @@ float CValidador::leerFloatPositivo(string mensaje){
         if (ss >> valor && !(ss >> extra) && valor > 0){
             return valor; // al retornar el valor valido se sale del metodo
         }
-        /* En este if se evaluan 3 condiciones con el operador &&, la unica manera que el if se ejecute es que todas sean true 
+        /* En este if se evaluan 3 condiciones con el operador &&, la unica manera que el if se ejecute es que todas sean true
         *la primera (ss >> valor) devuelve true cuando ss lee un numero real, o sea que si lee cualquier otra cosa decuelve false, el if no entra *y se repite el ciclo
         * La segunda (!(ss >> extra)) devuelve true cuando ss falla en leer el siguiente caracter despues de la primera condicion, o sea que si *hay cualquier cosa despues del real que se leyo la condicion devuelve false y el if no entra
         * La tercera (valor > 0) revisa si el valor es positivo, si no devuelve false y el if no entra */
     }
-    
+
 }
 
 string CValidador::leerTextoNoVacio(string mensaje){
-    // STUB (Grupo 3): implementar
-    string texto;
-    salida << mensaje;
-    entrada >> texto;
-    return texto;
+string texto;
+
+    while (true) {
+        salida << mensaje;
+
+        // Si hay un error al leer la entrada, salimos devolviendo vacío
+        if (!getline(entrada, texto)) {
+            return "";
+        }
+
+        // Verificamos si el texto tiene al menos un caracter real (que no sea espacio)
+        bool tieneContenido = false;
+        for (char c : texto) {
+            // Usamos unsigned char por seguridad interna de C++ con caracteres especiales
+            if (!isspace(static_cast<unsigned char>(c))) {
+                tieneContenido = true;
+                break; // Encontramos algo válido, no necesitamos seguir buscando
+            }
+        }
+
+        // Si encontramos contenido real, lo devolvemos
+        if (tieneContenido) {
+            return texto;
+        }
+
+        // Si eran puros espacios, el ciclo 'while' vuelve a pedir el texto amablemente.
+    }
 }
 
 string CValidador::leerFecha(string mensaje){
