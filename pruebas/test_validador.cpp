@@ -18,7 +18,32 @@ int main(){
         CValidador v(in, out);
         CHECK_EQ(v.leerEntero("n: ", 1, 10), 5);
     }
-
+    {
+        stringstream in("1\n10\n"); 
+        stringstream out;
+        CValidador v(in, out);
+        CHECK_EQ(v.leerEntero("n: ", 1, 10), 1);
+        CHECK_EQ(v.leerEntero("n: ", 1, 10), 10);
+    }
+    {
+        stringstream in("\n \n8\n");
+        stringstream out;
+        CValidador v(in, out);
+        CHECK_EQ(v.leerEntero("n: ", 1, 10), 8);
+    }
+    SECCION("CValidador: leerFloatPositivo");
+    {
+        stringstream in("texto\n-5.5\n0\n4.2\n");
+        stringstream out;
+        CValidador v(in, out);
+        CHECK_NEAR(v.leerFloatPositivo("precio: "), 4.2f, 0.001f);
+    }
+    {
+        stringstream in("texto_invalido\n");
+        stringstream out;
+        CValidador v(in, out);
+        CHECK_NEAR(v.leerFloatPositivo("precio: "), -1.0f, 0.001f);
+    }
     SECCION("CValidador: leerTextoNoVacio");
     {
         stringstream in("\n   \nIbuprofeno 400 mg\n");
