@@ -1,0 +1,15 @@
+@startuml
+
+class CValidador {
+  - entrada : istream&
+  - salida : ostream&
+
+  + CValidador(entrada : istream& = cin, salida : ostream& = cout)
+  + leerEntero(mensaje : string, minimo : int, maximo : int) : int
+  + leerFloatPositivo(mensaje : string) : float
+  + leerTextoNoVacio(mensaje : string) : string
+  + leerFecha(mensaje : string) : string
+  {static} + esFechaValida(fecha : string) : bool
+}
+
+@enduml
