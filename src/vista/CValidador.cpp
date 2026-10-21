@@ -90,7 +90,7 @@ string texto;
 
 
 string CValidador::leerFecha(string mensaje) {
-  while (true) {
+while (true) {
       // Leer el texto ingresado por el usuario con ayuda del método leerTextoNoVacio, que asegura que no sea una cadena vacía o solo espacios.
       string fecha = leerTextoNoVacio(mensaje);
 
@@ -128,14 +128,14 @@ string CValidador::leerFecha(string mensaje) {
           return fecha;
       }
 
-      // Si la fecha no es válida, se informa al usuario.
-      salida << "Fecha inválida o inexistente en el calendario.\nInténtalo de nuevo.\n";
+      // Si la fecha no es válida, se informa al usuario desde aquí
+      salida << "Error: Fecha inválida o con formato incorrecto. Inténtalo de nuevo.\n";
     }
 }
 
 
 bool CValidador::esFechaValida(string fecha){
-    // Paso A: Validar la estructura visual básica (debe medir exactamente 10 caracteres y tener guiones en su lugar,
+// Paso A: Validar la estructura visual básica (debe medir exactamente 10 caracteres y tener guiones en su lugar,
     // exactamente en la posición número 2 y en la 5)
     if (fecha.length() != 10 || fecha[2] != '-' || fecha[5] != '-') {
         return false;
@@ -172,7 +172,6 @@ bool CValidador::esFechaValida(string fecha){
         diasPorMes[1] = 29;
     }
 
-    // Paso G: Verificar que el día no rebase el límite máximo del mes correspondiente. Recordemos que se resta 1,
-    // dado que se cuenta desde el indice 0, por lo que enero es 0, febrero es 1, marzo es 2, y así sucesivamente. Por eso se hace mes - 1 para obtener el índice correcto en el vector diasPorMes.Al final, solo se verifica si es mayor o igual al día máximo permitido para ese mes. Si es mayor, la fecha no es válida y se devuelve false.
+    // Paso G: Verificar que el día no rebase el límite máximo del mes correspondiente.
     return dia <= diasPorMes[mes - 1];
 }
